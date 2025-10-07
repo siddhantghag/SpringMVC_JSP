@@ -1,0 +1,52 @@
+CREATE DATABASE IF NOT EXISTS omsdb CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE omsdb;
+
+DROP TABLE IF EXISTS order_items;
+DROP TABLE IF EXISTS orders;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;
+
+CREATE TABLE users (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  username VARCHAR(100) NOT NULL UNIQUE,
+  password VARCHAR(200) NOT NULL,
+  role VARCHAR(20) NOT NULL,
+  enabled TINYINT(1) NOT NULL DEFAULT 1
+);
+
+CREATE TABLE categories (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(120) NOT NULL UNIQUE,
+  description VARCHAR(500)
+);
+
+CREATE TABLE products (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(150) NOT NULL,
+  description VARCHAR(1000),
+  price DECIMAL(12,2) NOT NULL,
+  stockQuantity INT NOT NULL,
+  imageUrl VARCHAR(300),
+  category_id BIGINT NOT NULL,
+  CONSTRAINT fk_prod_cat FOREIGN KEY (category_id) REFERENCES categories(id)
+);
+
+CREATE TABLE orders (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  customer_id BIGINT NOT NULL,
+  orderDate DATETIME NOT NULL,
+  status VARCHAR(40) NOT NULL,
+  totalAmount DECIMAL(12,2) NOT NULL,
+  CONSTRAINT fk_ord_user FOREIGN KEY (customer_id) REFERENCES users(id)
+);
+
+CREATE TABLE order_items (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  order_id BIGINT NOT NULL,
+  product_id BIGINT NOT NULL,
+  quantity INT NOT NULL,
+  price DECIMAL(12,2) NOT NULL,
+  CONSTRAINT fk_item_order FOREIGN KEY (order_id) REFERENCES orders(id),
+  CONSTRAINT fk_item_product FOREIGN KEY (product_id) REFERENCES products(id)
+);
