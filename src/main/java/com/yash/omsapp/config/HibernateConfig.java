@@ -11,13 +11,21 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
-import javax.persistence.EntityManagerFactory; // <-- JPA (not Spring Boot)
+import javax.persistence.EntityManagerFactory; 
 import java.util.Properties;
 
+/**
+ * Hibernate and JPA configuration for the Order Management System.
+ * Sets up DataSource, EntityManagerFactory, TransactionManager, and exception translation.
+ */
 @Configuration
 @EnableTransactionManagement
 public class HibernateConfig {
-
+	
+	/**
+     * Configures the HikariCP DataSource for MySQL.
+     * @return configured DataSource bean
+     */
 	@Bean
 	public DataSource dataSource() {
 		HikariConfig cfg = new HikariConfig();
@@ -29,7 +37,13 @@ public class HibernateConfig {
 		cfg.setMaximumPoolSize(10);
 		return new HikariDataSource(cfg);
 	}
-
+	
+	/**
+     * Configures the JPA EntityManagerFactory using Hibernate as the provider.
+     * Scans the model package for entity classes.
+     * @param ds the DataSource to use
+     * @return configured EntityManagerFactory bean
+     */
 	@Bean
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource ds) {
 		LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
@@ -47,12 +61,21 @@ public class HibernateConfig {
 		return emf;
 	}
 
+	/**
+     * Configures the JPA transaction manager.
+     * @param emf the EntityManagerFactory to manage transactions
+     * @return configured JpaTransactionManager bean
+     */
 	@Bean
 	public JpaTransactionManager transactionManager(EntityManagerFactory emf) {
 		// <-- Use JPA's EntityManagerFactory, not EntityManagerFactoryBuilder
 		return new JpaTransactionManager(emf);
 	}
 
+	/**
+     * Enables automatic translation of persistence exceptions into Spring's DataAccessException hierarchy.
+     * @return configured PersistenceExceptionTranslationPostProcessor bean
+     */
 	@Bean
 	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
 		return new PersistenceExceptionTranslationPostProcessor();

@@ -15,14 +15,27 @@ import com.yash.omsapp.service.AuthUserDetailsService;
 import com.yash.omsapp.util.SecurityRoles;
 
 
+/**
+ * Spring Security configuration for the Order Management System.
+ * Defines authentication provider, password encoding, and access rules for different user roles.
+ */
 @EnableWebSecurity
 @Configuration
 //@componentScan(basePackages = "com.yash.omsapp.service")
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+	/**
+     * Custom service to load user details from the database.
+     */
 	@Autowired
 	private AuthUserDetailsService userDetailsService;
 
+
+    /**
+     * Configures a delegating password encoder.
+     * Supports multiple encoding formats like {bcrypt}, {noop}, etc.
+     * @return PasswordEncoder bean
+     */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		// Delegating encoder supports {bcrypt}, {noop}, etc.
@@ -34,6 +47,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		// org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
 	}
 
+	/**
+     * Configures the DAO-based authentication provider.
+     * Uses the custom UserDetailsService and password encoder.
+     * @return DaoAuthenticationProvider bean
+     */
 	@Bean
 	public DaoAuthenticationProvider authProvider() {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -42,12 +60,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		return provider;
 	}
 
+	/**
+     * Registers the custom authentication provider with the authentication manager.
+     * @param auth AuthenticationManagerBuilder
+     */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) {
 		auth.authenticationProvider(authProvider());
 	}
 
 	
+
+    /**
+     * Configures HTTP security rules for the application.
+     * Defines access permissions based on user roles and sets up login/logout behavior.
+     * @param http HttpSecurity object
+     * @throws Exception in case of configuration errors
+     */
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable() // <-- TEMPORARY for dev

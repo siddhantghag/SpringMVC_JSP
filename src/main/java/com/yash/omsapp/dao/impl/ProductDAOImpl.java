@@ -11,10 +11,16 @@ import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * This class provides the actual database operations for products.
+ * It uses JPA EntityManager to interact with the product table.
+ */
+
 @Repository
 @Transactional
 public class ProductDAOImpl implements ProductDAO {
 
+	 // Injects the JPA EntityManager to perform database operations
 	@PersistenceContext
 	private EntityManager em;
 

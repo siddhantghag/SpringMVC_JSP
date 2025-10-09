@@ -15,6 +15,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * This controller handles the checkout process for customers.
+ * It shows the cart, suggests products, and places the order.
+ */
 @Controller
 @RequestMapping("/checkout")
 public class CheckoutController {
@@ -29,6 +33,11 @@ public class CheckoutController {
 	@Autowired
 	private ProductService productService;
 
+	/**
+     * Shows the checkout page with cart items and suggested products.
+     * @param model used to pass data to the view
+     * @return the checkout.jsp page
+     */
 	@GetMapping
 	public String checkout(Model model) {
 		model.addAttribute("cart", cartService.getCart());
@@ -38,7 +47,15 @@ public class CheckoutController {
 
 		return "checkout";
 	}
-
+	
+	/**
+     * Places the order for the logged-in user.
+     * Clears the cart after successful order placement.
+     * If there's an error, shows the checkout page again with error message.
+     * @param auth the authentication object to get current user
+     * @param model used to pass messages to the view
+     * @return success page or back to checkout
+     */
 	@PostMapping("/place")
 	public String place(Authentication auth, Model model) {
 		User u = userService.findByUsername(auth.getName());

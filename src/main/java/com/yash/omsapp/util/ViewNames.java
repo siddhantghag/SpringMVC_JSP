@@ -1,7 +1,10 @@
 package com.yash.omsapp.util;
 
-public final class ViewNames {
-	private ViewNames() {
+public final class ViewNames 
+{
+	private ViewNames() 
+	{
+		
 	}
 
 	public static final String INDEX = "index";

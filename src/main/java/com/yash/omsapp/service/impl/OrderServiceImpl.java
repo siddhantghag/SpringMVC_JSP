@@ -12,6 +12,10 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This service handles business logic for placing and managing orders.
+ * It connects the controller layer with the DAO layer.
+ */
 @Service
 @Transactional
 public class OrderServiceImpl implements OrderService {
@@ -21,6 +25,13 @@ public class OrderServiceImpl implements OrderService {
 	@Autowired
 	private ProductDAO productDAO;
 
+	/**
+     * Places a new order for the given customer using the cart items.
+     * Checks stock availability, calculates total, and updates product stock.
+     * @param customer the user placing the order
+     * @param cartQuantities map of productId to quantity
+     * @return the saved Order object
+     */
 	@Override
 	public Order placeOrder(User customer, Map<Long, Integer> cartQuantities) {
 		if (cartQuantities == null || cartQuantities.isEmpty())
@@ -58,22 +69,42 @@ public class OrderServiceImpl implements OrderService {
 		return orderDAO.save(order);
 	}
 
+	/**
+     * Returns all orders placed by a specific customer.
+     * @param customer the user whose orders are requested
+     * @return list of Order objects
+     */
 	@Override
 	public List<Order> myOrders(User customer) {
 		return orderDAO.findByCustomer(customer);
 	}
 
+	/**
+     * Returns a paginated list of all orders.
+     * @param page current page number
+     * @param size number of orders per page
+     * @return list of Order objects
+     */
 	@Override
 	public List<Order> all(int page, int size) {
 		int offset = (Math.max(page, 1) - 1) * size;
 		return orderDAO.findAll(offset, size);
 	}
 
+	/**
+     * Returns the total number of orders in the system.
+     * @return total count of orders
+     */
 	@Override
 	public long countAll() {
 		return orderDAO.countAll();
 	}
 
+	/**
+     * Updates the status of an order (e.g., SHIPPED, DELIVERED).
+     * @param orderId the ID of the order to update
+     * @param status the new status to set
+     */
 	@Override
 	public void updateStatus(Long orderId, String status) {
 		orderDAO.updateStatus(orderId, status);

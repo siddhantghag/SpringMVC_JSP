@@ -8,10 +8,17 @@ import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
+
+
+/**
+ * This class provides the actual database operations for Category.
+ * It uses JPA EntityManager to interact with the database.
+ */
 @Repository
 @Transactional
 public class CategoryDAOImpl implements CategoryDAO {
 
+	 // Injects the JPA EntityManager to perform database operations
 	@PersistenceContext
 	private EntityManager em;
 

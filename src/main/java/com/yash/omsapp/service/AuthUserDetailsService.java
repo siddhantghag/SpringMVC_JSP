@@ -9,12 +9,24 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
+/**
+ * This service is used by Spring Security to load user details during login.
+ * It checks if the user exists and is enabled, then returns user info for authentication.
+ */
 @Service
 public class AuthUserDetailsService implements UserDetailsService {
 
 	@Autowired
 	private UserDAO userDAO;
 
+	 /**
+     * Loads user details by username.
+     * If the user is not found or disabled, throws an exception.
+     * Otherwise, returns a Spring Security User object with username, password, and role.
+     * @param username the username entered during login
+     * @return UserDetails object used by Spring Security
+     * @throws UsernameNotFoundException if user is not found or disabled
+     */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User u = userDAO.findByUsername(username);

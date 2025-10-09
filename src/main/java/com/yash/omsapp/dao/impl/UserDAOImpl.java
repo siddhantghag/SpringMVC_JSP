@@ -7,10 +7,15 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 
+/**
+ * This class provides the actual database operations for users.
+ * It uses JPA EntityManager to interact with the user table.
+ */
 @Repository
 @Transactional
 public class UserDAOImpl implements UserDAO {
 
+	// Injects the JPA EntityManager to perform database operations
 	@PersistenceContext
 	private EntityManager em;
 

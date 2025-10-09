@@ -3,15 +3,43 @@ package com.yash.omsapp.dao;
 import com.yash.omsapp.model.Category;
 import java.util.List;
 
-public interface CategoryDAO {
-	Category findById(Long id);
+/**
+ * This interface defines basic database operations for Category.
+ * It is used to interact with the category table in the database.
+ */
+public interface CategoryDAO 
+{
+	/**
+     * Finds a category by its ID.
+     * @param id the ID of the category
+     * @return the matching Category or null if not found
+     */
+	public Category findById(Long id);
 
-	Category findByName(String name);
+	/**
+     * Finds a category by its name.
+     * @param name the name of the category
+     * @return the matching Category or null if not found
+     */
+	public Category findByName(String name);
 
-	List<Category> findAll();
+	/**
+     * Returns a list of all categories.
+     * @return list of Category objects
+     */
+	public List<Category> findAll();
 
-	Category save(Category c);
+	/**
+     * Saves a new category or updates an existing one.
+     * @param c the category to save
+     * @return the saved Category object
+     */
+	public Category save(Category c);
 
-	void delete(Long id);
+	/**
+     * Deletes a category by its ID.
+     * @param id the ID of the category to delete
+     */
+	public void delete(Long id);
 }
 	

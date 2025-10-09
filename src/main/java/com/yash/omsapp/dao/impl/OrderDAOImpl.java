@@ -9,10 +9,15 @@ import javax.persistence.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * This class provides the actual database operations for orders.
+ * It uses JPA EntityManager to interact with the order table.
+ */
 @Repository
 @Transactional
 public class OrderDAOImpl implements OrderDAO {
 
+	// Injects the JPA EntityManager to perform database operations
 	@PersistenceContext
 	private EntityManager em;
 
